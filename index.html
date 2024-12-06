@@ -21,7 +21,15 @@
     <div class="main-content hidden">
         <nav>
             <div class="logo">
-                <img src="logo.jpg" alt="Creative Math Zone Logo">
+                <a href="index.html">
+                    <img src="logo.jpg" alt="Creative Math Zone Logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="about.html">About</a>
+                <a href="courses.html">Courses</a>
+                <a href="teachers.html">Teachers</a>
             </div>
             <div class="nav-buttons">
                 <button class="theme-toggle" aria-label="Toggle theme">
@@ -32,7 +40,7 @@
             </div>
         </nav>
 
-        <main class="landing-page">
+        <main class="landing-page section active" data-section="home">
             <div class="left-content">
                 <h1 class="main-title">Welcome to <span>CREATIVE MATH ZONE</span></h1>
                 <h2 class="tagline">We are here to guide you</h2>
@@ -40,19 +48,76 @@
             </div>
             <div class="right-content">
                 <div class="portrait-container">
-                    <img src="portrait.png" alt="Salil Majhi" class="portrait">
+                    <img src="portrait.png" alt="JRC" class="portrait">
                     <div class="name-container">
-                        <h2 class="instructor-name">Salil Majhi</h2>
+                        <h2 class="instructor-name">JRC</h2>
                     </div>
                 </div>
             </div>
         </main>
 
-        <section class="second-page">
+        <section class="second-page section" data-section="second">
             <h2>Second Page</h2>
             <p>Content for second page will be added later</p>
         </section>
+
+        <!-- Glitch Transition -->
+        <div class="glitch-transition">
+            <div class="glitch-layers">
+                <div class="glitch-layer"></div>
+                <div class="glitch-layer"></div>
+                <div class="glitch-layer"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>About Creative Math Zone</h3>
+                    <p>Empowering students with innovative mathematical learning solutions and personalized guidance for academic excellence.</p>
+                </div>
+
+                <div class="footer-section contact">
+                    <h3>Contact Information</h3>
+                    <p>
+                        <i class="fas fa-phone"></i> <span>Phone: [Your Phone]</span><br>
+                        <i class="fas fa-envelope"></i> <span>Email: [Your Email]</span><br>
+                        <i class="fas fa-map-marker-alt"></i> <span>Address: [Your Address]</span>
+                    </p>
+                </div>
+
+                <div class="footer-section quick-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#courses">Courses</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section social">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Creative Math Zone. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="script.js"></script>
 </body>

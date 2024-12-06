@@ -88,67 +88,116 @@ const savedTheme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', savedTheme);
 themeToggleIcon.textContent = savedTheme === 'dark' ? '🌞' : '🌙';
 
-// Theme toggle function
+// Theme Toggle Function
 function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    const root = document.documentElement;
+    const overlay = document.querySelector('.theme-transition-overlay');
+    const currentTheme = root.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     
-    // Get button position
-    const buttonRect = themeToggle.getBoundingClientRect();
-    const centerX = buttonRect.left + buttonRect.width / 2;
-    const centerY = buttonRect.top + buttonRect.height / 2;
+    // Add transition overlay
+    overlay.classList.add('active');
     
-    // Set circle position
-    const activeCircle = newTheme === 'light' ? lightCircle : darkCircle;
-    const inactiveCircle = newTheme === 'light' ? darkCircle : lightCircle;
-    
-    activeCircle.style.left = `${centerX}px`;
-    activeCircle.style.top = `${centerY}px`;
-    activeCircle.style.width = `${Math.max(window.innerWidth, window.innerHeight) * 3}px`;
-    activeCircle.style.height = `${Math.max(window.innerWidth, window.innerHeight) * 3}px`;
-    
-    // Reset inactive circle
-    inactiveCircle.classList.remove('active');
-    inactiveCircle.style.transform = 'translate(-50%, -50%) scale(0)';
-    
-    // Activate transition
-    transitionOverlay.classList.add('active');
-    activeCircle.classList.add('active');
-    
-    // Update theme after animation starts
+    // Change theme
     setTimeout(() => {
-        document.documentElement.setAttribute('data-theme', newTheme);
+        root.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         themeToggleIcon.textContent = newTheme === 'dark' ? '🌞' : '🌙';
         
-        // Remove transition after it completes
+        // Remove overlay
         setTimeout(() => {
-            transitionOverlay.classList.remove('active');
-            activeCircle.classList.remove('active');
-        }, 1000);
-    }, 500);
+            overlay.classList.remove('active');
+        }, 700);
+    }, 50);
 }
-
-// Update circle position on window resize
-window.addEventListener('resize', () => {
-    const buttonRect = themeToggle.getBoundingClientRect();
-    const centerX = buttonRect.left + buttonRect.width / 2;
-    const centerY = buttonRect.top + buttonRect.height / 2;
-    
-    lightCircle.style.left = `${centerX}px`;
-    lightCircle.style.top = `${centerY}px`;
-    darkCircle.style.left = `${centerX}px`;
-    darkCircle.style.top = `${centerY}px`;
-    
-    const size = Math.max(window.innerWidth, window.innerHeight) * 3;
-    lightCircle.style.width = `${size}px`;
-    lightCircle.style.height = `${size}px`;
-    darkCircle.style.width = `${size}px`;
-    darkCircle.style.height = `${size}px`;
-});
 
 // Add click event listener
 themeToggle.addEventListener('click', toggleTheme);
+
+// Page Transition
+const sections = document.querySelectorAll('.section');
+const glitchTransition = document.querySelector('.glitch-transition');
+const navLinks = document.querySelectorAll('nav a');
+
+function transitionToSection(targetSection) {
+    // Don't transition if already on the section
+    if (targetSection.classList.contains('active')) return;
+
+    // Start glitch effect
+    glitchTransition.classList.add('active');
+
+    // After a small delay, switch sections
+    setTimeout(() => {
+        sections.forEach(section => section.classList.remove('active'));
+        targetSection.classList.add('active');
+
+        // Remove glitch effect after transition
+        setTimeout(() => {
+            glitchTransition.classList.remove('active');
+        }, 400); // Match this with the CSS animation duration
+    }, 200);
+}
+
+// Add click handlers to navigation links
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetSection = document.querySelector(`[data-section="${targetId}"]`);
+        if (targetSection) {
+            transitionToSection(targetSection);
+        }
+    });
+});
+
+// Smart Header Scroll
+let lastScrollTop = 0;
+const nav = document.querySelector('nav');
+const scrollThreshold = 100; // Minimum scroll amount before hiding/showing
+let isScrolling = false;
+
+window.addEventListener('scroll', () => {
+    if (!isScrolling) {
+        window.requestAnimationFrame(() => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Show/hide header based on scroll direction
+            if (currentScroll > lastScrollTop && currentScroll > scrollThreshold) {
+                // Scrolling down & past threshold
+                nav.classList.add('nav-hidden');
+                nav.classList.remove('nav-visible');
+            } else {
+                // Scrolling up or at top
+                nav.classList.remove('nav-hidden');
+                nav.classList.add('nav-visible');
+            }
+            
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+            isScrolling = false;
+        });
+    }
+    isScrolling = true;
+});
+
+// Back to Top Button
+const backToTopButton = document.getElementById('backToTop');
+
+// Show button when scrolling down
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        backToTopButton.classList.add('visible');
+    } else {
+        backToTopButton.classList.remove('visible');
+    }
+});
+
+// Smooth scroll to top
+backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
 
 // Preloader
 document.addEventListener('DOMContentLoaded', () => {
@@ -164,14 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             preloader.remove();
         }, 500);
-    }, 2000); // Adjust this time (in ms) to make the preloader stay longer or shorter
+    }, 1500); // Adjust this time (in ms) to make the preloader stay longer or shorter
 });
 
 // Optimize portrait image loading
 document.addEventListener('DOMContentLoaded', () => {
     const portrait = document.querySelector('.portrait');
     if (portrait) {
-        portrait.loading = 'eager';
+        portrait.loading = 'lazy';
         portrait.decoding = 'async';
     }
 });
